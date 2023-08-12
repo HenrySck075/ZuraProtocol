@@ -1,21 +1,18 @@
-import json, os, requests, websocket
+from __future__ import annotations
+
+import os, requests, websocket
 import time
-from subprocess import PIPE, Popen
+from subprocess import Popen
 from . import enumerations as enum
-import socket
-from typing import TypedDict, Callable
-import logging, threading
-sock = socket.socket()
+import logging, threading, sys
+from .sock import HatsuneMiku as DevTools
+
+os.environ["PYTHONDONTWRITEBYTECODE"] = 1
 
 log = logging.getLogger("KiraProtocol")
 logging.basicConfig(format='%(asctime)s - %(message)s %(levelname)s', level=logging.DEBUG)
 
-class DevToolsResponse(TypedDict, total=False):
-    sessionId: str # this and
-    method: str
-    id: int # this might not appear in response, especially events
-    params: dict
-    result: dict # and also this
+domains = ["Accessibility", "Animation", "Audits", "Autofill", "BackgroundService", "Browser", "CacheStorage", "Cast", "Console", "CSS", "Database", "Debugger", "DeviceAccess", "DeviceOrientation", "DOM", "DOMDebugger", "DOMSnapshot", "DOMStorage", "Emulation", "EventBreakpoints", "FedCm", "Fetch", "HeadlessExperimental", "HeapProfiler", "IndexedDB", "Input", "Inspector", "IO", "LayerTree", "Log", "Media", "Memory", "Network", "Overlay", "Page", "Performance", "PerformanceTimeline", "Preload", "Profiler", "Runtime", "Schema", "Security", "ServiceWorker", "Storage", "SystemInfo", "Target", "Tethering", "Tracing", "WebAudio", "WebAuthn"]
 
 class KiraOptions:
     _arguments = []
@@ -39,13 +36,16 @@ class KiraProtocol:
         """Use DevTools WebSocket dammit!
 
         (ChefRush ref)"""
-        self.id = 1 # increase every execute_command call
         
         self.option = option if isinstance(option,KiraOptions) else KiraProtocol()
-
+        
+        import socket
+        sock = socket.socket()
         if port == 0:
             sock.bind(('', port))
             port = sock.getsockname()[1]
+
+        del socket
 
         print(f"current port is {port}")
         logi = open(os.devnull, "wb")
@@ -77,21 +77,21 @@ class KiraProtocol:
         socket.connect(wsUrl)
         self.__socket = DevTools(socket)
         
-        a = self.__socket.execute("Target.getTargets")["result"]["targetInfos"][0]
-        self.current_window_handle = self.__socket.execute("Target.attachToTarget",{"targetId":a["targetId"],"flatten":True})["params"]["sessionId"]
+        a = self.__socket.execute(enum.Target.method_GetTargets)["result"]["targetInfos"][0]
+        self.__socket.set_handle(self.__socket.execute(enum.Target.method_AttachToTarget,{"targetId":a["targetId"],"flatten":True})["params"]["sessionId"])
+        self.__socket.execute(enum.Runtime.method_Evaluate, expression="let __arguments__")
         self.current_url = a["url"]
         self.title = a["title"]
     
-    def __dude_being_fr__(self):
-        """Enable every single domains known to man
-
-        ```
-        
-        hello guys, henry 30 minutes later here.
-        
-        im so fucking dumb bruh why did this exist"""
-        for i in ["Accessibility", "Animation", "Audits", "Autofill", "BackgroundService", "Browser", "CacheStorage", "Cast", "Console", "CSS", "Database", "Debugger", "DeviceAccess", "DeviceOrientation", "DOM", "DOMDebugger", "DOMSnapshot", "DOMStorage", "Emulation", "EventBreakpoints", "FedCm", "Fetch", "HeadlessExperimental", "HeapProfiler", "IndexedDB", "Input", "Inspector", "IO", "LayerTree", "Log", "Media", "Memory", "Network", "Overlay", "Page", "Performance", "PerformanceTimeline", "Preload", "Profiler", "Runtime", "Schema", "Security", "ServiceWorker", "Storage", "SystemInfo", "Target", "Tethering", "Tracing", "WebAudio", "WebAuthn"]:
+    def __enable__(self):
+        """Enable every single domains known to man"""
+        for i in domains:
             self.__socket.execute(i+".enable")
+    
+    def __disable__(self):
+        """Disable every single domains known to mant"""
+        for i in domains:
+            self.__socket.execute(i+".disable")
 
     # Properties, maybe
     @property
@@ -99,7 +99,12 @@ class KiraProtocol:
         return self.__socket.execute(enum.Page.method_GetFrameTree)
     
     @property
-    def socket(self): return self.__socket
+    def socket(self):
+        "For debugging if something goes wrong with the functions"
+        return self.__socket
+
+    @property
+    def current_window_handle(self): return self.__socket.current_window_handle
 
     # funny
 
@@ -110,3 +115,14 @@ class KiraProtocol:
             self.__socket.execute(enum.Page.method_Enable)
             self.__socket.wait_for_event(enum.Page.event_DomContentEventFired)
             self.__socket.execute(enum.Page.method_Disable)
+
+    def quit(self):
+        self.__socket.execute(enum.Browser.method_Close)
+
+    # Find Elements
+
+    def find_element(self, by, input):
+        return getattr(self, "find_element_by_"+by.replace(" ","_"))(input)
+    
+    def find_element_by_css_selector(self, selector):
+        self.__socket.execute(enum.Runtime.method_Evaluate,{"expression":""})

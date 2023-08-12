@@ -1,1 +1,1 @@
-from .main import Selewacky, SelewackyOptions
+from .webdriver import KiraProtocol, KiraOptions
