@@ -41,7 +41,7 @@ class KiraProtocol:
         (ChefRush ref)"""
         self.id = 1 # increase every execute_command call
         
-        self.option = option if isinstance(option,KiraOptions) else SelewackyOptions()
+        self.option = option if isinstance(option,KiraOptions) else KiraProtocol()
 
         if port == 0:
             sock.bind(('', port))
@@ -108,7 +108,5 @@ class KiraProtocol:
         
         if self.option.page_load_strategy == "eager": 
             self.__socket.execute(enum.Page.method_Enable)
-            self.__socket.execute(enum.Fetch.method_Enable)
             self.__socket.wait_for_event(enum.Page.event_DomContentEventFired)
-            self.__socket.execute(enum.Fetch.method_Disable)
             self.__socket.execute(enum.Page.method_Disable)
