@@ -1,5 +1,5 @@
 from datetime import datetime
-class TimeoutError(Exception):
+class TimeoutException(Exception):
     "nya"
 
 class Waiter:
@@ -10,5 +10,8 @@ class Waiter:
     def until(self, condition):
         time = int(datetime.now().timestamp()+self.timeout)
         while datetime.now().timestamp() < time:
-            if x:=condition(driver) is not None: return x
-        raise TimeoutError(f"waited {self.time} seconds and nothing happened")
+            x = condition(self.driver)
+            if x is not None: 
+                if x != False:
+                    return x
+        raise TimeoutException(f"waited {self.timeout} seconds and nothing happened")

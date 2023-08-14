@@ -1,16 +1,18 @@
 from typing import Callable, Any, Tuple
-from .main import Selewacky
+from .webdriver import KiraProtocol
+from .webelement import KiraElement
 import re
+__all__ = ("title_is","presence_of_element_located")
 # todo: ok
-condition = Callable[[Selewacky],Any]
-boolean = Callable[[Selewacky],bool]
+condition = Callable[[KiraProtocol],KiraElement]
+boolean = Callable[[KiraProtocol],bool]
 
-def title_is(title:str) -> condition:
+def title_is(title:str) -> boolean:
     def pred(driver):
         return driver.title == title
     return pred
 
-def title_contains(title:str) -> condition:
+def title_contains(title:str) -> boolean:
     def pred(driver):
         return title in driver.title
     return pred

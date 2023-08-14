@@ -1,3 +1,4 @@
+__import__("os").environ["PYTHONDONTWRITEBYTECODE"] = "1"
 from .accessibility import domain as Accessibility
 from .animation import domain as Animation
 from .audits import domain as Audits

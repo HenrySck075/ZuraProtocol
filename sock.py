@@ -12,10 +12,11 @@ class DevToolsResponse(TypedDict, total=False):
     result: dict # and also this
 
 class HatsuneMiku:
-    def __init__(self, socket):
+    def __init__(self, socket, logging:bool):
         self.__ws = socket
         self.id = 1
         self.current_window_handle = ""
+        self.logging = logging
     
     def set_handle(self, h):
         self.current_window_handle = h
@@ -32,12 +33,15 @@ class HatsuneMiku:
         self.__ws.send(json.dumps(a))
         self.id+=1
         # todo: errors raising because im funny
-        return json.loads(self.__ws.recv())
+        while True: # in case some event tampered in
+            recv = json.loads(self.__ws.recv())
+            log.debug("execute_%s:\nIN: %s\nOUT: %s", method, a, recv)
+            if "id" in recv: return recv
 
     def wait_for_event(self, event:str) -> None:
         while True:
             rec=json.loads(self.__ws.recv())
-            log.debug(rec)
+            log.debug("wait_for_event: %s", rec)
             if "method" not in rec: continue
             if rec["method"] == event: break
             if rec["method"] == enum.Fetch.event_RequestPaused:
