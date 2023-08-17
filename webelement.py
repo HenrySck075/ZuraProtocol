@@ -1,7 +1,7 @@
 from .sock import HatsuneMiku as DevTools
 from . import enumerations as enum
 
-class KiraElement:
+class Element:
     def __init__(self, **kwargs):
         """
         Args:

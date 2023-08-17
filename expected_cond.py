@@ -1,11 +1,11 @@
 from typing import Callable, Any, Tuple
-from .webdriver import KiraProtocol
-from .webelement import KiraElement
+from .webdriver import Protocol
+from .webelement import Element
 import re
 __all__ = ("title_is","presence_of_element_located")
 # todo: ok
-condition = Callable[[KiraProtocol],KiraElement]
-boolean = Callable[[KiraProtocol],bool]
+condition = Callable[[Protocol],Element]
+boolean = Callable[[Protocol],bool]
 
 def title_is(title:str) -> boolean:
     def pred(driver):

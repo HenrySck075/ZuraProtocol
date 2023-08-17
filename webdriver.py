@@ -22,7 +22,7 @@ class KiraOptions:
     def add_argument(self, arg): self._arguments.append(arg)
 
 
-class KiraProtocol:
+class Protocol:
     """Use DevTools WebSocket dammit!
 
     (ChefRush ref)"""
@@ -32,13 +32,13 @@ class KiraProtocol:
     def __init__(
         self,
         port = 0,
-        option: KiraOptions = None
+        option: KiraOptions = None,
     ):
         """Use DevTools WebSocket dammit!
 
         (ChefRush ref)"""
         
-        self.option = option if isinstance(option,KiraOptions) else KiraProtocol()
+        self.option = option if isinstance(option,KiraOptions) else KiraOptions()
         browserPath = self.option.binary_location
         
         import socket
@@ -50,18 +50,12 @@ class KiraProtocol:
         del socket
 
         print(f"current port is {port}")
-        logi = open(os.devnull, "wb")
-        def writePrint(buf):
-            print(buf)
-            logi.write(buf)
-
-        logi.write = writePrint
         # start the browser
         print("Opening browser...")
         a = [browserPath,f"--remote-debugging-port={port}",f"--remote-allow-origins=http://localhost:{port}"]
         a.extend(self.option._arguments)
         if self.option.binary_location != "":
-            Popen(a, stderr=logi, stdout=logi, bufsize=1) #idc
+            Popen(a, bufsize=1) #idc
             time.sleep(2)
         # get the
         print("Connecting to DevTools...")
@@ -77,8 +71,8 @@ class KiraProtocol:
 
         wsUrl = s.get(f"http://localhost:{port}/json/version").json()["webSocketDebuggerUrl"]
         socket = websocket.WebSocket()
-        socket.connect(wsUrl)
-        self.__socket = DevTools(socket,logging)
+        socket.connect(wsUrl,timeout=20)
+        self.__socket = DevTools(socket)
         
         a = self.__socket.execute(enum.Target.method_GetTargets)["result"]["targetInfos"][0]
         self.__socket.set_handle(self.__socket.execute(enum.Target.method_AttachToTarget,targetId=a["targetId"],flatten=True)["result"]["sessionId"])
@@ -118,10 +112,10 @@ class KiraProtocol:
         if self.option.page_load_strategy == "eager": 
             self.__socket.execute(enum.Page.method_Enable)
             self.__socket.wait_for_event(enum.Page.event_DomContentEventFired)
+            self.__socket.execute(enum.Page.method_Disable)
         a = self.__socket.execute(enum.Target.method_GetTargets)["result"]["targetInfos"][0]
         self.current_url = a["url"]
         self.title = a["title"]
-        self.__socket.execute(enum.Page.method_Disable)
         self.__socket.execute(enum.Runtime.method_Evaluate, expression="let __arguments__ = {}")
 
     def quit(self):

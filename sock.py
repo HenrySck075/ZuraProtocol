@@ -1,5 +1,5 @@
 from typing import TypedDict
-import json, logging
+import json, logging, asyncio
 from . import enumerations as enum
 
 log = logging.getLogger("KiraProtocol")
@@ -12,11 +12,10 @@ class DevToolsResponse(TypedDict, total=False):
     result: dict # and also this
 
 class HatsuneMiku:
-    def __init__(self, socket, logging:bool):
+    def __init__(self, socket):
         self.__ws = socket
         self.id = 1
         self.current_window_handle = ""
-        self.logging = logging
     
     def set_handle(self, h):
         self.current_window_handle = h
@@ -35,17 +34,15 @@ class HatsuneMiku:
         # todo: errors raising because im funny
         while True: # in case some event tampered in
             recv = json.loads(self.__ws.recv())
-            log.debug("execute_%s:\nIN: %s\nOUT: %s", method, a, recv)
+            #self.buf.insert_text("execute_%s:\nIN: %s\nOUT: %s\n" % (method, a, recv))
             if "id" in recv: return recv
 
     def wait_for_event(self, event:str) -> None:
         while True:
             rec=json.loads(self.__ws.recv())
-            log.debug("wait_for_event: %s", rec)
+            #self.buf.insert_text("wait_for_event: %s\n" % rec)
             if "method" not in rec: continue
             if rec["method"] == event: break
-            if rec["method"] == enum.Fetch.event_RequestPaused:
-                self.__ws.execute(enum.Fetch.method_FulfillRequest,{"requestId":rec["params"]["requestId"],"responseCode":200})
     
     def receive(self):
         return json.loads(self.__ws.recv())
