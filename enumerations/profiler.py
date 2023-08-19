@@ -28,4 +28,3 @@ class Profiler(base.sendhelp):
         super().__init__()
 
     
-domain = Profiler()

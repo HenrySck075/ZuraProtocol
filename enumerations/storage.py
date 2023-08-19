@@ -75,4 +75,3 @@ class Storage(base.sendhelp):
         super().__init__()
 
     
-domain = Storage()

@@ -30,4 +30,3 @@ class Input(base.sendhelp):
         super().__init__()
 
     
-domain = Input()

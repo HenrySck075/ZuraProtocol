@@ -1,3 +1,4 @@
+
 from . import _ok as base
 
 class Database(base.sendhelp):
@@ -17,4 +18,3 @@ class Database(base.sendhelp):
         super().__init__()
 
     
-domain = Database()

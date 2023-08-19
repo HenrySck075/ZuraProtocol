@@ -28,4 +28,3 @@ class Security(base.sendhelp):
         super().__init__()
 
     
-domain = Security()

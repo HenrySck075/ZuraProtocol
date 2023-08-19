@@ -39,4 +39,3 @@ class WebAudio(base.sendhelp):
         super().__init__()
 
     
-domain = WebAudio()

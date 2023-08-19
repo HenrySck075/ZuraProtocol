@@ -14,4 +14,3 @@ class Inspector(base.sendhelp):
         super().__init__()
 
     
-domain = Inspector()

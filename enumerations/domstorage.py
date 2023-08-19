@@ -1,3 +1,4 @@
+
 from . import _ok as base
 
 class DOMStorage(base.sendhelp):
@@ -22,4 +23,3 @@ class DOMStorage(base.sendhelp):
         super().__init__()
 
     
-domain = DOMStorage()

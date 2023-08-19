@@ -28,4 +28,3 @@ class LayerTree(base.sendhelp):
         super().__init__()
 
     
-domain = LayerTree()

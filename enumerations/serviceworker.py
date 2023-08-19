@@ -32,4 +32,3 @@ class ServiceWorker(base.sendhelp):
         super().__init__()
 
     
-domain = ServiceWorker()

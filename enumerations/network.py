@@ -138,4 +138,3 @@ class Network(base.sendhelp):
         super().__init__()
 
     
-domain = Network()

@@ -21,4 +21,3 @@ class SystemInfo(base.sendhelp):
         super().__init__()
 
     
-domain = SystemInfo()

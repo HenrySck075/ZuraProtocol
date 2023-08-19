@@ -1,3 +1,4 @@
+
 from . import _ok as base
 
 class DeviceOrientation(base.sendhelp):
@@ -9,4 +10,3 @@ class DeviceOrientation(base.sendhelp):
         super().__init__()
 
     
-domain = DeviceOrientation()

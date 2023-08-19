@@ -1,3 +1,4 @@
+
 from . import _ok as base
 
 class EventBreakpoints(base.sendhelp):
@@ -9,4 +10,3 @@ class EventBreakpoints(base.sendhelp):
         super().__init__()
 
     
-domain = EventBreakpoints()

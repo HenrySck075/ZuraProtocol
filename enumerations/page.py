@@ -144,4 +144,3 @@ class Page(base.sendhelp):
         super().__init__()
 
     
-domain = Page()

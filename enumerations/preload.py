@@ -29,4 +29,3 @@ class Preload(base.sendhelp):
         super().__init__()
 
     
-domain = Preload()

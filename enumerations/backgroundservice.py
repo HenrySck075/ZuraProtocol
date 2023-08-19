@@ -1,3 +1,4 @@
+
 from . import _ok as base
 
 class BackgroundService(base.sendhelp):
@@ -18,4 +19,3 @@ class BackgroundService(base.sendhelp):
         super().__init__()
 
     
-domain = BackgroundService()

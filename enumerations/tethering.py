@@ -12,4 +12,3 @@ class Tethering(base.sendhelp):
         super().__init__()
 
     
-domain = Tethering()

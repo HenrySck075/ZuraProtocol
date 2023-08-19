@@ -16,4 +16,3 @@ class Performance(base.sendhelp):
         super().__init__()
 
     
-domain = Performance()

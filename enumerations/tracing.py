@@ -24,4 +24,3 @@ class Tracing(base.sendhelp):
         super().__init__()
 
     
-domain = Tracing()

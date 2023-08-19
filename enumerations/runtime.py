@@ -64,4 +64,3 @@ class Runtime(base.sendhelp):
         super().__init__()
 
     
-domain = Runtime()

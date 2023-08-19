@@ -1,3 +1,4 @@
+
 from . import _ok as base
 
 class IndexedDB(base.sendhelp):
@@ -23,5 +24,5 @@ class IndexedDB(base.sendhelp):
     def __init__(self):
         super().__init__()
 
-
+    
 domain = IndexedDB()

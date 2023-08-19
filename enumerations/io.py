@@ -13,4 +13,3 @@ class IO(base.sendhelp):
         super().__init__()
 
     
-domain = IO()

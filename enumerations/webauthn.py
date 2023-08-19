@@ -30,4 +30,3 @@ class WebAuthn(base.sendhelp):
         super().__init__()
 
     
-domain = WebAuthn()

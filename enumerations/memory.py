@@ -23,4 +23,3 @@ class Memory(base.sendhelp):
         super().__init__()
 
     
-domain = Memory()

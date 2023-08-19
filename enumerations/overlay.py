@@ -61,4 +61,3 @@ class Overlay(base.sendhelp):
         super().__init__()
 
     
-domain = Overlay()

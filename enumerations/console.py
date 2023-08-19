@@ -1,3 +1,4 @@
+
 from . import _ok as base
 
 class Console(base.sendhelp):
@@ -14,4 +15,3 @@ class Console(base.sendhelp):
         super().__init__()
 
     
-domain = Console()

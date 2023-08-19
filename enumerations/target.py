@@ -40,4 +40,3 @@ class Target(base.sendhelp):
         super().__init__()
 
     
-domain = Target()

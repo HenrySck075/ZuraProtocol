@@ -1,3 +1,4 @@
+
 from . import _ok as base
 
 class Browser(base.sendhelp):
@@ -39,4 +40,3 @@ class Browser(base.sendhelp):
         super().__init__()
 
     
-domain = Browser()

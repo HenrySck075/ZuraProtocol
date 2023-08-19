@@ -1,3 +1,4 @@
+
 from . import _ok as base
 
 class Debugger(base.sendhelp):
@@ -58,4 +59,3 @@ class Debugger(base.sendhelp):
         super().__init__()
 
     
-domain = Debugger()

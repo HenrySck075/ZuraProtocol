@@ -24,4 +24,3 @@ class Media(base.sendhelp):
         super().__init__()
 
     
-domain = Media()

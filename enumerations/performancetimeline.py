@@ -16,4 +16,3 @@ class PerformanceTimeline(base.sendhelp):
         super().__init__()
 
     
-domain = PerformanceTimeline()

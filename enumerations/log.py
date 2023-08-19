@@ -18,4 +18,3 @@ class Log(base.sendhelp):
         super().__init__()
 
     
-domain = Log()
