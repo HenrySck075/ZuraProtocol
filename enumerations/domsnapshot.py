@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class DOMSnapshot(base.sendhelp):
@@ -28,3 +27,4 @@ class DOMSnapshot(base.sendhelp):
         super().__init__()
 
     
+domain = DOMSnapshot()

@@ -1,3 +1,4 @@
+import mimetypes
 import os, requests, websocket
 import time
 from subprocess import Popen
@@ -5,7 +6,6 @@ from . import enumerations as enum
 import logging, json
 from .sock import HatsuneMiku as DevTools
 from .webelement import Element
-from typing import TypeVar
 
 log = logging.getLogger("KiraProtocol")
 #logging.basicConfig(format='%(asctime)s - %(message)s %(levelname)s', level=logging.DEBUG)
@@ -21,8 +21,6 @@ class KiraOptions:
         
         If left empty then I'll try to connect to existing protocol instead"""
     def add_argument(self, arg): self._arguments.append(arg)
-
-meow = TypeVar("meow", contravariant=True)
 
 class Protocol:
     """Use DevTools WebSocket dammit!
@@ -57,7 +55,6 @@ class Protocol:
         del socket
 
         self.connected_to_page = (page != None)
-        wsUrl = page["webSocketDebuggerUrl"]
         if page == None:
             a = [browserPath,f"--remote-debugging-port={port}",f"--remote-allow-origins=http://localhost:{port}"]
             a.extend(self.option._arguments)
@@ -76,6 +73,7 @@ class Protocol:
             s.mount('http://', HTTPAdapter(max_retries=retries))
 
             wsUrl = s.get(f"http://localhost:{port}/json/version").json()["webSocketDebuggerUrl"]
+        else: wsUrl = page["webSocketDebuggerUrl"]
         socket = websocket.WebSocket()
         socket.connect(wsUrl,timeout=20)
         self.__socket = DevTools(socket)
@@ -129,17 +127,34 @@ class Protocol:
         self.title = a["title"]
         self.__socket.execute(enum.Runtime.method_Evaluate, expression="let __arguments__ = {}")
 
-    def fetch(self, url, method="GET", header=None, body=None, objectType: meow = dict) -> meow:
+    def fetch(self, url, method="GET", header=None, body=None, files = {}) -> dict:
         """Fetch data from URL in current session
         
         NOTE: the body and response are currently expected to be a JSON object
+
+        :param files: Structure: \
+        ``` \
+        {filetype (e.g. image, avatar, ...): file content in bytes \
+        ```
         """
-        expr = f'await (await fetch("{url}", \u007bmode: "same-origin", method: "{method}"'
+        expr = ""
+        if files != {}:
+            expr += "__arguments__['formdata'] = new FormData()\n"
+            expr += f"__arguments__['formdata'].append('str', {json.dumps(body)})"+"\n"
+            body = None
+            for i in files.keys():
+                self.__socket.execute(enum.Runtime.method_Evaluate, expression = f"__arguments__['fd_{i}'] = new Blob(['{files[i]}'])")
+                expr += f"__arguments__['formdata'].append('{i}', __arguments__['fd_{i}'])"+"\n"
+
+        expr += f'await (await fetch("{url}", \u007bmode: "same-origin", method: "{method}"'
         if body!=None and method not in ["POST", "PUT"]: body = None
         if type(header)==dict: expr+=", headers: " + json.dumps(header)
         if type(body  )==dict: expr+=", body: JSON.stringify(" + json.dumps(body) + ")"
+        if files != {}       : expr+=", body: __arguments__['formdata']"
         expr+="})).json()"
-        return self.__socket.execute(enum.Runtime.method_Evaluate, replMode=True, returnByValue=True, expression=expr)["result"]["result"]["value"]
+        a=self.__socket.execute(enum.Runtime.method_Evaluate, replMode=True, returnByValue=True, expression=expr)
+        print(a)
+        return a["result"]["result"]["value"]
         
     
     def quit(self):

@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Cast(base.sendhelp):
@@ -19,3 +18,4 @@ class Cast(base.sendhelp):
         super().__init__()
 
     
+domain = Cast()

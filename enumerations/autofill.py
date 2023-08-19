@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Autofill(base.sendhelp):
@@ -14,3 +13,4 @@ class Autofill(base.sendhelp):
         super().__init__()
 
     
+domain = Autofill()

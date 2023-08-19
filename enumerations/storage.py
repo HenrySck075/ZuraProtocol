@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Storage(base.sendhelp):
@@ -75,3 +74,4 @@ class Storage(base.sendhelp):
         super().__init__()
 
     
+domain = Storage()

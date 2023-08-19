@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class FedCm(base.sendhelp):
@@ -19,3 +18,4 @@ class FedCm(base.sendhelp):
         super().__init__()
 
     
+domain = FedCm()

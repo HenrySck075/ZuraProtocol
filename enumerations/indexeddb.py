@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class IndexedDB(base.sendhelp):

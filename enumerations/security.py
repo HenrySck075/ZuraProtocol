@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Security(base.sendhelp):
@@ -28,3 +27,4 @@ class Security(base.sendhelp):
         super().__init__()
 
     
+domain = Security()

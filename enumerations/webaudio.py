@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class WebAudio(base.sendhelp):
@@ -39,3 +38,4 @@ class WebAudio(base.sendhelp):
         super().__init__()
 
     
+domain = WebAudio()

@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Media(base.sendhelp):
@@ -24,3 +23,4 @@ class Media(base.sendhelp):
         super().__init__()
 
     
+domain = Media()

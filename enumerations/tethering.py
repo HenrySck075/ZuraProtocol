@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Tethering(base.sendhelp):
@@ -12,3 +11,4 @@ class Tethering(base.sendhelp):
         super().__init__()
 
     
+domain = Tethering()

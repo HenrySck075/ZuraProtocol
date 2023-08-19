@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class HeadlessExperimental(base.sendhelp):
@@ -13,3 +12,4 @@ class HeadlessExperimental(base.sendhelp):
         super().__init__()
 
     
+domain = HeadlessExperimental()

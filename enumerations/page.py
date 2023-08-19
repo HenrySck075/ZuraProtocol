@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Page(base.sendhelp):
@@ -144,3 +143,4 @@ class Page(base.sendhelp):
         super().__init__()
 
     
+domain = Page()

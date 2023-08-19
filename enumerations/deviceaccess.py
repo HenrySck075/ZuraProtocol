@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class DeviceAccess(base.sendhelp):
@@ -18,3 +17,4 @@ class DeviceAccess(base.sendhelp):
         super().__init__()
 
     
+domain = DeviceAccess()

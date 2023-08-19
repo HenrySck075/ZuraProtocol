@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Performance(base.sendhelp):
@@ -16,3 +15,4 @@ class Performance(base.sendhelp):
         super().__init__()
 
     
+domain = Performance()

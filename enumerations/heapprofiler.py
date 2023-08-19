@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class HeapProfiler(base.sendhelp):
@@ -31,3 +30,4 @@ class HeapProfiler(base.sendhelp):
         super().__init__()
 
     
+domain = HeapProfiler()

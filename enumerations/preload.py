@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Preload(base.sendhelp):
@@ -29,3 +28,4 @@ class Preload(base.sendhelp):
         super().__init__()
 
     
+domain = Preload()

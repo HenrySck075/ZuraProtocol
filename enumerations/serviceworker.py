@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class ServiceWorker(base.sendhelp):
@@ -32,3 +31,4 @@ class ServiceWorker(base.sendhelp):
         super().__init__()
 
     
+domain = ServiceWorker()

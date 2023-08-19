@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Animation(base.sendhelp):
@@ -27,3 +26,4 @@ class Animation(base.sendhelp):
         super().__init__()
 
     
+domain = Animation()

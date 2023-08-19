@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class IO(base.sendhelp):
@@ -13,3 +12,4 @@ class IO(base.sendhelp):
         super().__init__()
 
     
+domain = IO()

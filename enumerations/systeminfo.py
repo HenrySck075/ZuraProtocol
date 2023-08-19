@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class SystemInfo(base.sendhelp):
@@ -21,3 +20,4 @@ class SystemInfo(base.sendhelp):
         super().__init__()
 
     
+domain = SystemInfo()

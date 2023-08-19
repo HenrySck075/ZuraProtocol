@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class CacheStorage(base.sendhelp):
@@ -20,3 +19,4 @@ class CacheStorage(base.sendhelp):
         super().__init__()
 
     
+domain = CacheStorage()

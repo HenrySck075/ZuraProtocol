@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Runtime(base.sendhelp):
@@ -64,3 +63,4 @@ class Runtime(base.sendhelp):
         super().__init__()
 
     
+domain = Runtime()

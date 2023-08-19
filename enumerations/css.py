@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class CSS(base.sendhelp):
@@ -80,3 +79,4 @@ class CSS(base.sendhelp):
         super().__init__()
 
     
+domain = CSS()

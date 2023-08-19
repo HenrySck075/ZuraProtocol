@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Schema(base.sendhelp):
@@ -11,3 +10,4 @@ class Schema(base.sendhelp):
         super().__init__()
 
     
+domain = Schema()

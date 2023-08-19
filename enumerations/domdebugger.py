@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class DOMDebugger(base.sendhelp):
@@ -22,3 +21,4 @@ class DOMDebugger(base.sendhelp):
         super().__init__()
 
     
+domain = DOMDebugger()

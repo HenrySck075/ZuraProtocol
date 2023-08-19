@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Log(base.sendhelp):
@@ -18,3 +17,4 @@ class Log(base.sendhelp):
         super().__init__()
 
     
+domain = Log()

@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Memory(base.sendhelp):
@@ -23,3 +22,4 @@ class Memory(base.sendhelp):
         super().__init__()
 
     
+domain = Memory()

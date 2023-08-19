@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Overlay(base.sendhelp):
@@ -61,3 +60,4 @@ class Overlay(base.sendhelp):
         super().__init__()
 
     
+domain = Overlay()

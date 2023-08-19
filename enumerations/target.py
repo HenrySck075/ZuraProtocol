@@ -1,4 +1,3 @@
-
 from . import _ok as base
 
 class Target(base.sendhelp):
@@ -40,3 +39,4 @@ class Target(base.sendhelp):
         super().__init__()
 
     
+domain = Target()
