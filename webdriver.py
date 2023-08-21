@@ -127,7 +127,7 @@ class Protocol:
         self.title = a["title"]
         self.__socket.execute(enum.Runtime.method_Evaluate, expression="let __arguments__ = {}")
 
-    def fetch(self, url, method="GET", header=None, body=None, files = {}) -> dict:
+    def fetch(self, url, method="GET", header=None, body=None, files = {}, log=False, rbv=True) -> dict | str:
         """Fetch data from URL in current session
         
         NOTE: the body and response are currently expected to be a JSON object
@@ -136,6 +136,7 @@ class Protocol:
         ``` \
         {filetype (e.g. image, avatar, ...): file content in bytes \
         ```
+        :param rbv: Set to false if you want to get the string content
         """
         expr = ""
         if files != {}:
@@ -151,9 +152,9 @@ class Protocol:
         if type(header)==dict: expr+=", headers: " + json.dumps(header)
         if type(body  )==dict: expr+=", body: JSON.stringify(" + json.dumps(body) + ")"
         if files != {}       : expr+=", body: __arguments__['formdata']"
-        expr+="})).json()"
-        a=self.__socket.execute(enum.Runtime.method_Evaluate, replMode=True, returnByValue=True, expression=expr)
-        print(a)
+        expr+="}))"+(".json()" if rbv else ".text()")
+        a=self.__socket.execute(enum.Runtime.method_Evaluate, replMode=True, returnByValue=rbv, expression=expr)
+        if log: print(a)
         return a["result"]["result"]["value"]
         
     
