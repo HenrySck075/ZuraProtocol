@@ -1,17 +1,10 @@
-from typing import TypedDict
+from typing import Any, TypedDict
 import json, logging, asyncio
 from . import enumerations as enum
 
-log = logging.getLogger("KiraProtocol")
+log = logging.getLogger("ZuraProtocol")
 
-class DevToolsResponse(TypedDict, total=False):
-    sessionId: str # this and
-    method: str
-    id: int # this might not appear in response, especially events
-    params: dict
-    result: dict # and also this
-
-class HatsuneMiku:
+class DevToolsWS:
     def __init__(self, socket):
         self.__ws = socket
         self.id = 1
@@ -20,7 +13,7 @@ class HatsuneMiku:
     def set_frame(self, h):
         self.current_window_frame = h
 
-    def execute(self, method:str, **params) -> DevToolsResponse:
+    def execute(self, method:str, **params) -> Any:
         "WebSocket"
         a = {
             "sessionId": self.current_window_frame,
@@ -35,7 +28,7 @@ class HatsuneMiku:
         while True: # in case some event tampered in
             recv = json.loads(self.__ws.recv())
             #self.buf.insert_text("execute_%s:\nIN: %s\nOUT: %s\n" % (method, a, recv))
-            if "id" in recv: return recv
+            if "id" in recv: return recv.get("result")
     
     def close(self): self.__ws.close()
 

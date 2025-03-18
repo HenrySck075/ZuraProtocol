@@ -1,4 +1,4 @@
-from .sock import HatsuneMiku as DevTools
+from .sock import DevToolsWS as DevTools
 from . import enumerations as enum
 
 class Element:
@@ -15,9 +15,11 @@ class Element:
 
         self.nodeId = kwargs["nodeId"]
 
-        self.__socket = kwargs["socket"]
+        self.__socket: DevTools = kwargs["socket"]
 
     def click(self):
+        boxModel = self.__socket.execute(enum.DOM.method_GetBoxModel)
+        self.__socket.execute(enum.DOM.method_ScrollIntoViewIfNeeded, nodeId=self.nodeId)
         self.__socket.execute(enum.Runtime.method_Evaluate, expression = f"__arguments__[{self.arg_location}].click()")
     
     @property

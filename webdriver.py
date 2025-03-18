@@ -4,15 +4,15 @@ import time
 from subprocess import Popen
 from . import enumerations as enum
 import logging, json
-from .sock import HatsuneMiku as DevTools
+from .sock import DevToolsWS as DevTools
 from .webelement import Element
 
-log = logging.getLogger("KiraProtocol")
+log = logging.getLogger("ZuraProtocol")
 #logging.basicConfig(format='%(asctime)s - %(message)s %(levelname)s', level=logging.DEBUG)
 
 domains = ["Accessibility", "Animation", "Audits", "Autofill", "BackgroundService", "Browser", "CacheStorage", "Cast", "Console", "CSS", "Database", "Debugger", "DeviceAccess", "DeviceOrientation", "DOM", "DOMDebugger", "DOMSnapshot", "DOMStorage", "Emulation", "EventBreakpoints", "FedCm", "Fetch", "HeadlessExperimental", "HeapProfiler", "IndexedDB", "Input", "Inspector", "IO", "LayerTree", "Log", "Media", "Memory", "Network", "Overlay", "Page", "Performance", "PerformanceTimeline", "Preload", "Profiler", "Runtime", "Schema", "Security", "ServiceWorker", "Storage", "SystemInfo", "Target", "Tethering", "Tracing", "WebAudio", "WebAuthn"]
 
-class KiraOptions:
+class ZuraOptions:
     def __init__(self):
         self._arguments = []
         self.page_load_strategy = 'eager'
@@ -26,13 +26,12 @@ class Protocol:
     """Use DevTools WebSocket dammit!
 
     (ChefRush ref)"""
-
-    current_window_frame = ""
     
+    current_window_handle = ""
     def __init__(
         self,
         port = 0,
-        option: KiraOptions = None,
+        option: ZuraOptions | None = None,
         page = None
     ):
         """Use DevTools WebSocket dammit!
@@ -43,7 +42,7 @@ class Protocol:
         :param option: Browser startup option
         :param page: Page info from `/json`. If specified, 2 params above will be ignored"""
         
-        self.option = option if isinstance(option,KiraOptions) else KiraOptions()
+        self.option = option if isinstance(option,ZuraOptions) else ZuraOptions()
         browserPath = self.option.binary_location
         
         import socket
@@ -79,8 +78,8 @@ class Protocol:
         self.__socket = DevTools(socket)
         
         if page == None:
-            a = self.__socket.execute(enum.Target.method_GetTargets)["result"]["targetInfos"][0]
-            self.__socket.set_frame(self.__socket.execute(enum.Target.method_AttachToTarget,targetId=a["targetId"],flatten=True)["result"]["sessionId"])
+            a = self.__socket.execute(enum.Target.method_GetTargets)["targetInfos"][0]
+            self.__socket.set_frame(self.__socket.execute(enum.Target.method_AttachToTarget,targetId=a["targetId"],flatten=True)["sessionId"])
             self.__socket.execute(enum.Runtime.method_Evaluate, expression="let __arguments__ = {}")
             self.current_url = a["url"]
             self.title = a["title"]
@@ -122,7 +121,7 @@ class Protocol:
             self.__socket.execute(enum.Page.method_Enable)
             self.__socket.wait_for_event(enum.Page.event_DomContentEventFired)
             self.__socket.execute(enum.Page.method_Disable)
-        a = self.__socket.execute(enum.Target.method_GetTargets)["result"]["targetInfos"][0]
+        a = self.__socket.execute(enum.Target.method_GetTargets)["targetInfos"][0]
         self.current_url = a["url"]
         self.title = a["title"]
         self.__socket.execute(enum.Runtime.method_Evaluate, expression="let __arguments__ = {}")
@@ -155,7 +154,7 @@ class Protocol:
         expr+="}))"+(".json()" if rbv else ".text()")
         a=self.__socket.execute(enum.Runtime.method_Evaluate, replMode=True, returnByValue=rbv, expression=expr)
         if log: print(a)
-        return a["result"]["result"]["value"]
+        return a["value"]
         
     
     def quit(self):
@@ -165,14 +164,14 @@ class Protocol:
 
     # Find Elements
     def _add_to_args(self, func):
-        location = self.__socket.execute(enum.Runtime.method_Evaluate, expression = "Object.keys(__arguments__).length")["result"]["result"]["value"]
+        location = self.__socket.execute(enum.Runtime.method_Evaluate, expression = "Object.keys(__arguments__).length")["value"]
         a = self.__socket.execute(enum.Runtime.method_Evaluate, expression = f"__arguments__[{location}] = {func}")
-        if a["result"]["result"]["subtype"] == 'null': location = None
+        if a["subtype"] == 'null': location = None
         return location
     
     def __get_element_by_args_location(self,location):
         if location is not None:
-            node = self.__socket.execute(enum.DOM.method_DescribeNode,objectId = self.__socket.execute(enum.Runtime.method_Evaluate, expression=f"__arguments__[{location}]")["result"]["result"]["objectId"])["result"]["node"]
+            node = self.__socket.execute(enum.DOM.method_DescribeNode,objectId = self.__socket.execute(enum.Runtime.method_Evaluate, expression=f"__arguments__[{location}]")["objectId"])["node"]
             return Element(nodeId = node["nodeId"], socket = self.__socket, location = location, handle=self.current_window_handle)
         else: return None
 
